@@ -5,6 +5,7 @@
 #ifndef CMINER_CMINERBASE_H
 #define CMINER_CMINERBASE_H
 
+#include <ostream>
 #include <string>
 #include <list>
 #include <vector>
@@ -12,7 +13,7 @@
 #include "Rule.h"
 
 class CMinerBase {
-private:
+protected:
     int windowSize;     // 窗口大小，每个片段的长度
     int maxGap;         // 频繁子序列中两个相邻字符（事件）间的最大间隔
     int minSupport;     // 频繁子序列的最小出现次数
@@ -109,6 +110,7 @@ public:
     std::map<int, std::map<std::string, int>> getFreSubsequencesTier();
     int getMaxSeqLength();
 
+    friend std::ostream& operator<<(std::ostream& os, const CMinerBase &cb);
 };
 
 

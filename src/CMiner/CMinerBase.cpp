@@ -236,3 +236,17 @@ std::map<int, std::map<std::string, int>> CMinerBase::getFreSubsequencesTier() {
 int CMinerBase::getMaxSeqLength() {
     return this->maxSeqLength;
 }
+
+std::ostream& operator<<(std::ostream& os, const CMinerBase & cb) {
+    os <<"\n================= Generation Correlation Rules ==============\n"
+       <<"Window size:\t"<<this->windowSize<<"\n"
+       <<"Max Gap:\t"<<this->maxGap<<"\n"
+       <<"Min Support:\t"<<this->minSupport<<'\n'
+       <<"Min Confidence:\t"<<this->minConfidence<<"\n"
+       <<"Input Sequence Length:\t\t"<<this->inputSequence.length()<<"\n"
+       <<"Input Segments Length:\t\t"<<this->inputSegments.size()<<"\n"
+       <<"Frequent Subsequences:\t\t"<<this->freSubsequences<<"\n"
+       <<"Closed Frequent Subsequences:\t"<<this->closedFreSubsequences<<"\n";
+
+       return os;
+}
