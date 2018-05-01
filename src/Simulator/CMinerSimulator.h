@@ -1,12 +1,12 @@
-//
-// Created by root on 01/05/18.
-//
-
+/**
+ * 采用CMiner算法作为PredictCache的预测算法，模拟使用。
+ */
 #ifndef CMINER_CMINERSIMULATOR_H
 #define CMINER_CMINERSIMULATOR_H
 
+#include "Simulator.h"
 
-class CMinerSimulator {
+class CMinerSimulator : Simulator {
 
 };
 
