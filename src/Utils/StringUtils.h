@@ -8,7 +8,7 @@
 
 class StringUtils {
 public:
-    static std::vector<std::string> &FileAccessLog::split( const std::string &str,
+    static std::vector<std::string> &split( const std::string &str,
                                                            const std::string &delimiters,
                                                            std::vector<std::string> &elems,
                                                            bool skip_empty = true );

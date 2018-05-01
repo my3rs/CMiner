@@ -5,7 +5,7 @@
 #include "StringUtils.h"
 
 
-std::vector<std::string> & StringUtils::FileAccessLog::split( const std::string &str,
+std::vector<std::string> & StringUtils::split( const std::string &str,
                                                 const std::string &delimiters,
                                                 std::vector<std::string> &elems,
                                                 bool skip_empty = true )
