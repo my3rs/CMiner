@@ -6,9 +6,30 @@
 #define CMINER_HDFSSUBSEQSUFFIX_H
 
 #include <string>
+#include <set>
 
 class HDFSSubseqSuffix {
+private:
     std::string subsequence;
+    int occerTimes;
+    std::set<std::string> suffixes;
+
+public:
+    HDFSSubseqSuffix(std::string subsequence, int occerTimes, std::set<std::string> suffixes);
+
+    void addSuffix(std::string suffix);
+
+    std::string getSubsequence();
+
+    void setSubsequence(std::string subsequence);
+
+    int getOccerTimes();
+
+    void setOccerTimes(int occertimes);
+
+    std::set<std::string> getSuffixes();
+
+    void setSuffixes(std::set<std::string> suffixes);
 };
 
 
