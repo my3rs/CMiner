@@ -291,15 +291,7 @@ map<string, HDFSRule> CMinerHDFS::generateRules() {
                 for (int j = historyStart; j < historyEnd; ++j) {
                     historyList.insert(accessFiles[i]);
                 }
-
-                std::stringstream ss;
-                for (ssize_t i = 0; i < historyList.size(); ++ i) {
-                    if (i == 0) {
-                        ss << "|";
-                    }
-                    ss << historyList[i];
-                }
-                string historyStr = ss.str();
+                string historyStr = boost::algorithm::join(historyList, "|");
                 float historyConf = freSubsequences[historyStr] * 1.0f;
 
                 // 生成prediction子序列（只有一个文件）
