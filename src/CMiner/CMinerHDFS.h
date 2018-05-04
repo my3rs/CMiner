@@ -96,6 +96,59 @@ public:
     * 生成:	Map<String, HDFSRule> rules
     */
     map<string, HDFSRule> generateRules();
+
+    /**
+	 * 清除List/MAP对象占用的空间，恢复初始状态
+	 */
+	 void clear();
+
+    /**
+    * 执行关联规则的挖掘过程
+    *
+    * @return rules
+    */
+    map<string, HDFSRule> startMining();
+
+
+
+    /** 算法参数的 getters and setters */
+    int getWindowSize();
+
+    void setWindowSize(int windowSize);
+
+    int getMaxGap();
+
+    void setMaxGap(int maxGap);
+
+    int getMinSupport();
+
+    void setMinSupport(int minSupport);
+
+    float getMinConfidence();
+
+    void setMinConfidence(float minConfidence);
+
+    vector<string> getInputSeqence();
+
+    void setInputSeqence(vector<string> inputSequence);
+
+    /** 中间结果的getters */
+    vector<vector<string>> getInputSegments();
+
+    map<string, HDFSSubseqSuffix> getDs();
+
+    map<string, int> getFreSubsequences();
+
+    map<string, int> getClosedFreSubsequences();
+
+    map<string, HDFSRule> getRules();
+
+    map<int, map<string, int>> getFreSubsequencesTier();
+
+    int getMaxSeqLength();
+
+    /** 重载 */
+    friend std::ostream&operator<<(std::ostream& out, const CMinerHDFS &cm);
 };
 
 

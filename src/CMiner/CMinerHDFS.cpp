@@ -2,7 +2,7 @@
 // Created by root on 01/05/18.
 //
 
-#include "../Utils/StringUtils.h"
+#include <boost/algorithm/string.hpp>
 #include "CMinerHDFS.h"
 #include <string.h>
 
@@ -129,7 +129,7 @@ void CMinerHDFS::candidateFreSubsequences(string currentSubseq, int occerTimes) 
 
     // 添加当前序列至 候选频发子序列对应的长度层次中
     vector<string> vtmp;
-    StringUtils::split_by_string(currentSubseq, "\\|", vtmp);
+    boost::split(vtmp, currentSubseq, boost::is_any_of("|"), boost::token_compress_on);
     int seqLen = vtmp.size();
     if (seqLen > maxSeqLength) {
         maxSeqLength = seqLen;
@@ -161,7 +161,7 @@ void CMinerHDFS::candidateFreSubsequences(string currentSubseq, int occerTimes) 
         for (string suffix : currentDs) {
             if (suffix.find(file) != string::npos) {
                 vector<string> suffixFiles;
-                StringUtils::split_by_string(suffix, "\\|", suffixFiles);
+                boost::split(suffixFiles, suffix, boost::is_any_of("|"), boost::token_compress_on);
 
                 for (int i = 0; i < suffixFiles.size() && i <= maxGap; i++) {
                     if (i == suffixFiles.size() - 1) {
@@ -227,7 +227,8 @@ void CMinerHDFS::genClosedFreSubsequences() {
                 for (auto &superEntry : this->freSubsequencesTier[i+1]) {
 
                     // 是子序列
-                    if(StringUtils::endWith(superEntry.first, "|" + entry.first)
+
+                    if(boost::algorithm::ends_with(superEntry.first, "|" + entry.first)
                             || strncmp(superEntry.first.c_str(), (entry.first + "|").c_str(), entry.first.size() + 1) == 0
                             || superEntry.first.find("|" + entry.first + "|") != string::npos)
                     {
@@ -273,8 +274,62 @@ map<string, HDFSRule> CMinerHDFS::generateRules() {
         string closedSeq = closedEntry.first;
         int closedSeqConf = closedEntry.second;
         vector<string> accessFiles;
+        boost::split(accessFiles, closedSeq, boost::is_any_of("|"),
+                     boost::token_compress_on);
+
+        // 只有一个文件的序列，无法导出关系，跳过
+        if (accessFiles.size() == 1) {
+            continue;
+        }
+
+        // 开始生成rule
+        for (int historyStart = 0; historyStart < accessFiles.size() - 1; historyStart ++) {
+
+            // 生成history子序列
+            for  (int historyEnd = historyStart + 1; historyEnd < accessFiles.size(); historyEnd ++) {
+                vector<string> historyList;
+                for (int j = historyStart; j < historyEnd; ++j) {
+                    historyList.insert(accessFiles[i]);
+                }
+
+                std::stringstream ss;
+                for (ssize_t i = 0; i < historyList.size(); ++ i) {
+                    if (i == 0) {
+                        ss << "|";
+                    }
+                    ss << historyList[i];
+                }
+                string historyStr = ss.str();
+                float historyConf = freSubsequences[historyStr] * 1.0f;
+
+                // 生成prediction子序列（只有一个文件）
+                for (int predictionStart = historyEnd; predictionStart < accessFiles.size(); predictionStart++ ){
+
+                    string prediction = accessFiles[predictionStart];
+                    float newRuleConf = freSubsequences[prediction] / historyConf;
+
+                    // 当前规则confidence不够，跳过
+                    if (newRuleConf < minConfidence) {
+                        continue;
+                    }
+
+                    // 关联规则生成成功，放入规则集合中
+                    string ruleStr = historyStr;
+                    if (rules.find(ruleStr) == rules.end()) {
+                        rules.insert({ruleStr, HDFSRule(historyList, prediction, closedSeqConf, newRuleConf)});
+                    } else {
+                        if (rules[ruleStr].getSupport() < closedSeqConf) {
+                            rules[ruleStr].setSupport(closedSeqConf);
+                        }
+                    }
+                }
+            }
+        }
     }
+    return rules;
 }
+
+
 
 set<string> CMinerHDFS::generateOneCharFreSubseq(set<string> segments) {
     map<string, int> fileAccessTimes;
@@ -283,7 +338,7 @@ set<string> CMinerHDFS::generateOneCharFreSubseq(set<string> segments) {
     // 统计每个文件出现的次数
     for (auto segment : segments) {
         vector<string> files;
-        StringUtils::split_by_string(segmeng, "\\|", files);
+        boost::split(files, segment, boost::is_any_of("|"), boost::token_compress_on);
         for (auto file : files) {
             // 统计每个文件出现的次数
             int count = fileAccessTimes.find(file) != fileAccessTimes.end()
@@ -306,3 +361,151 @@ set<string> CMinerHDFS::generateOneCharFreSubseq(set<string> segments) {
     return oneFileFreSubseqs;
 }
 
+
+
+/**
+* 清除List/MAP对象占用的空间，恢复初始状态
+*/
+void CMinerHDFS::clear() {
+    inputSequence.clear();
+    inputSegments.clear();
+    freSubsequences.clear();
+    closedFreSubsequences.clear();
+    freSubsequencesTier.clear();
+    rules.clear();
+    Ds.clear();
+
+    maxSeqLength = 0;
+}
+
+
+/**
+* 执行关联规则的挖掘过程
+*
+* @return rules
+*/
+
+map<string, HDFSRule> CMinerHDFS::startMining() {
+
+    // 设置输入
+    setInputSeqence(inputSequence);
+
+    // 对初始访问序列分段
+    cutAccessSequence();
+
+    // 获取长度为1的频繁序列
+    generateFirstDs();
+
+    // 挖掘：频繁子序列
+    HDFSSubseqSuffix ss = getSeqFromDs();
+    candidateFreSubsequences(ss.getSubsequence(), ss.getOccerTimes());
+
+    // 过滤：Closed频繁子序列
+    genClosedFreSubsequences();
+
+    // 生成：关联规则
+    generateRules();
+
+    return rules;
+}
+
+
+
+int CMinerHDFS::getWindowSize() {
+    return windowSize;
+}
+
+void CMinerHDFS::setWindowSize(int windowSize) {
+    this->windowSize = windowSize;
+}
+
+int CMinerHDFS::getMaxGap() {
+    return maxGap;
+}
+
+void CMinerHDFS::setMaxGap(int maxGap) {
+    return maxGap;
+}
+
+int CMinerHDFS::getMinSupport() {
+    return minSupport;
+}
+
+void CMinerHDFS::setMinSupport(int minSupport) {
+    this->minSupport = minSupport;
+}
+
+float CMinerHDFS::getMinConfidence() {
+    return minConfidence;
+}
+
+void CMinerHDFS::setMinConfidence(float minConfidence) {
+    this->minConfidence = minConfidence;
+}
+
+vector<string> CMinerHDFS::getInputSeqence() {
+    return inputSequence;
+}
+
+void CMinerHDFS::setInputSeqence(vector<string> inputSequence) {
+    this->inputSequence.assign(inputSequence.begin(), inputSequence.end());
+}
+
+
+vector<vector<string>> CMinerHDFS::getInputSegments() {
+    return inputSegments;
+}
+
+
+map<string, HDFSSubseqSuffix> CMinerHDFS::getDs() {
+    return Ds;
+}
+
+map<string, int> CMinerHDFS::getFreSubsequences() {
+    return freSubsequences;
+}
+
+map<string, int> CMinerHDFS::getClosedFreSubsequences() {
+    return closedFreSubsequences;
+}
+
+map<string, HDFSRule> CMinerHDFS::getRules() {
+    return rules;
+}
+
+map<int, map<string, int>> CMinerHDFS::getFreSubsequencesTier() {
+    return freSubsequencesTier;
+}
+
+int CMinerHDFS::getMaxSeqLength() {
+    return maxSeqLength;
+}
+
+friend std::ostream&operator<<(std::ostream& out, const CMinerHDFS &cm) {
+    out<<"\n============ Generating Corrlation Rules ==============\n"
+       <<"Window Size:\t"<<cm.windowSize<<"\n"
+       <<"Max Gap:\t"<<cm.maxGap<<"\n"
+       <<"Min Support:\t"<<cm.minSupport<<"\n"
+       <<"Min Confidence:\t"<<cm.minConfidence<<"\n"
+
+       <<"Input Sequence Length:\t\t"<<cm.inputSequence.size()<<"\n"
+       <<"Input Segments Length:\t\t"<<cm.inputSegments.size()<<"\n"
+       <<"Frequent Subsequences:\t\t[";
+    for (auto &entry : cm.freSubsequences) {
+        for (auto &e : entry) {
+            out<<e<<" ";
+        }
+        out<<',';
+    }
+    out<<']\n';
+
+    out<<"Closed Frequent Subsequencs:\t[";
+    for (auto &entry : cm.closedFreSubsequences) {
+        out<<entry.first<<":"<<entry.second<<" ";
+    }
+    out<<"]\n";
+
+    out<<"Rules Number:\t"<<cm.rules.size()<<"\n";
+
+    return out;
+}

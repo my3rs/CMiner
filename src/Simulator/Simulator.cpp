@@ -2,7 +2,6 @@
 #include <fstream>
 #include <exception>
 #include "Simulator.h"
-#include "../Utils/StringUtils.h"
 #include "../CMiner/FileAccessLog.h"
 
 Simulator::Simulator(int fileCacheSize) {
