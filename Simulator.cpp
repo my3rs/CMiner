@@ -2,7 +2,7 @@
 #include <fstream>
 #include <exception>
 #include "Simulator.h"
-#include "../CMiner/FileAccessLog.h"
+#include "CMiner/FileAccessLog.h"
 
 Simulator::Simulator(int fileCacheSize) {
     this->FILE_CACHE = new cache::LRUCache(fileCacheSize);

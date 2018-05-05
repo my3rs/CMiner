@@ -8,7 +8,7 @@
 
 #include <vector>
 #include <string>
-#include "../LRUCache/LRUCache.h"
+#include "LRUCache/LRUCache.h"
 
 class Simulator {
 protected:

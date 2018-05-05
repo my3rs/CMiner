@@ -7,7 +7,6 @@
 #include "Simulator.h"
 
 class CMinerSimulator : Simulator {
-
 };
 
 
