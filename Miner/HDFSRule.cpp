@@ -2,6 +2,7 @@
 // Created by root on 01/05/18.
 //
 
+#include <iostream>
 #include "HDFSRule.h"
 
 HDFSRule::HDFSRule() {
@@ -58,7 +59,4 @@ void HDFSRule::setHistory(std::vector<std::string> history) {
     this->history = history;
 }
 
-void HDFSRule::setPrediction(std::string prediction) {
-    this->prediction = prediction;
-}
 

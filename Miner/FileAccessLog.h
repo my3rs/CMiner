@@ -7,57 +7,53 @@
 #define CMINER_FILEACCESSLOG_H
 
 #include <string>
+using std::string;
 
 class FileAccessLog {
 private:
     // Log记录格式：time: ugi= ip= cmd= Miner=	dst= perm=
     // 范例：2013-11-21 17:24:54,697: ugi=root	ip=/127.0.0.1	cmd=open	Miner=/input/access_log_1	dst=null	perm=null
-    std::string time;   // 客户端访问文件的时间：yyyy-MM-dd HH:mm:ss,SSS
-    std::string ugi;    // 客户端的用户标识
-    std::string ip;     // 客户端的IP
-    std::string cmd;    // 文件访问的具体操作，包括：open|create|delete|rename|mkdirs|listStatus|setReplication|setOwner|setPermission
-    std::string src;    // 文件操作中源文件地址
-    std::string dst;    // 文件操作中目标文件地址
-    std::string perm;   // 操作权限
+    string time;   // 客户端访问文件的时间：yyyy-MM-dd HH:mm:ss,SSS
+    string ugi;    // 客户端的用户标识
+    string ip;     // 客户端的IP
+    string cmd;    // 文件访问的具体操作，包括：open|create|delete|rename|mkdirs|listStatus|setReplication|setOwner|setPermission
+    string src;    // 文件操作中源文件地址
+    string dst;    // 文件操作中目标文件地址
+    string perm;   // 操作权限
     bool valid = true;
 
 public:
     friend std::ostream& operator << (std::ostream &output, FileAccessLog &log);
 
-    std::vector<std::string> &split( const std::string &str,
-                                     const std::string &delimiters,
-                                     std::vector<std::string> &elems,
-                                     bool skip_empty = true );
+    static FileAccessLog parse(string logLine);
 
-    static FileAccessLog parse(std::string logLine);
+    string getTime();
 
-    std::string getTime();
+    void setTime(string time);
 
-    void setTime(std::string time);
+    string getUgi();
 
-    std::string getUgi();
+    void setUgi(string ugi);
 
-    void setUgi(std::string ugi);
+    string getIp();
 
-    std::string getIp();
+    void setIp(string ip);
 
-    void setIp(std::string ip);
+    string getCmd();
 
-    std::string getCmd();
+    void setCmd(string cmd);
 
-    void setCmd(std::string cmd);
+    string getSrc();
 
-    std::string getSrc();
+    void setSrc(string src);
 
-    void setSrc(std::string src);
+    string getDst();
 
-    std::string getDst();
+    void setDst(string dst);
 
-    void setDst(std::string dst);
+    string getPerm();
 
-    std::string getPerm();
-
-    void setPerm(std::string perm);
+    void setPerm(string perm);
 
     bool isValid();
 

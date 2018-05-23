@@ -8,6 +8,7 @@
 
 #include <vector>
 #include <string>
+using std::string;
 
 class HDFSRule {
 private:
