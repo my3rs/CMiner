@@ -18,7 +18,7 @@ using std::string;
 class Simulator {
 public:
     cache::LRUCache FILE_CACHE;
-    Simulator(int fileCacheSize);
+    Simulator(int fileCacheSize) : FILE_CACHE(cache::LRUCache(fileCacheSize)) {};
 
     /**
 	 * 从指定的文件中读取文件访问日志数据集

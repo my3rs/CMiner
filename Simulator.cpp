@@ -5,9 +5,6 @@ using std::exception;
 #include "Simulator.h"
 #include "Miner/FileAccessLog.h"
 
-Simulator::Simulator(int fileCacheSize) : FILE_CACHE(cache::LRUCache(fileCacheSize)) {
-//    this->FILE_CACHE = cache::LRUCache(fileCacheSize);
-}
 
 std::vector<std::string> Simulator::getDataSet(std::string filePath, std::string cutCommonPrefix) {
     std::vector<std::string> logs;

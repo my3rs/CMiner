@@ -27,11 +27,10 @@ namespace cache {
         typedef typename std::list<key_value_pair_t>::iterator list_iterator_t;
 
         LRUCache(size_t max_size) :
-                _max_size(max_size) {
-        }
+                _max_size(max_size) { }
 
         void put(const std::string &key, const std::string &value) {
-            mt.lock();
+//            mt.lock();
             auto it = _cache_items_map.find(key);
             _cache_items_list.push_front(key_value_pair_t(key, value));
             if (it != _cache_items_map.end()) {
@@ -46,18 +45,18 @@ namespace cache {
                 _cache_items_map.erase(last->first);
                 _cache_items_list.pop_back();
             }
-            mt.unlock();
+//            mt.unlock();
         }
 
         const std::string &get(const std::string &key) {
-            mt.lock();
+//            mt.lock();
             auto it = _cache_items_map.find(key);
             if (it == _cache_items_map.end()) {
-                mt.unlock();
+//                mt.unlock();
                 throw std::range_error("There is no such key in cache");
             } else {
                 _cache_items_list.splice(_cache_items_list.begin(), _cache_items_list, it->second);
-                mt.unlock();
+//                mt.unlock();
                 return it->second->second;
             }
 
@@ -76,7 +75,7 @@ namespace cache {
         std::unordered_map<std::string, list_iterator_t> _cache_items_map;
         size_t _max_size;
 
-        std::mutex mt;
+//        std::mutex mt;
 
     };
 
