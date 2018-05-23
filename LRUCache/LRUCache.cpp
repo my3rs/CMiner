@@ -2,6 +2,7 @@
 // Created by root on 01/05/18.
 //
 
+#include <cstring>
 #include "LRUCache.h"
 
 cache::LRUCache Cache(10);

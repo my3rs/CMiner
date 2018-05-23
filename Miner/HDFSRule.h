@@ -27,9 +27,9 @@ public:
 
     void setHistory(std::vector<std::string> history);
 
-    std::string getPrediction(std::string prediction);
+    std::string getPrediction();
 
-    void setPrediction(std::string prediction);
+    void setPrediction(string prediction);
 
     int getSupport();
 

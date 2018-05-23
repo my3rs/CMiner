@@ -6,12 +6,17 @@
 #ifndef CMINER_SIMULATOR_H
 #define CMINER_SIMULATOR_H
 
+#include <iostream>
+using std::cout;
+using std::endl;
 #include <vector>
+using std::vector;
 #include <string>
+using std::string;
 #include "LRUCache/LRUCache.h"
 
 class Simulator {
-protected:
+public:
     cache::LRUCache FILE_CACHE;
     Simulator(int fileCacheSize);
 
@@ -21,14 +26,14 @@ protected:
 	 * @param cutCommonPrefix	需要截断的文件名公共前缀
 	 * @return	文件访问序列的文件名列表
 	 */
-	 std::vector<std::string> getDataSet(std::string filePath, std::string cutCommonPrefix);
+	 vector<string> getDataSet(string filePath, string cutCommonPrefix);
 
     /**
     * 从File Cache中读取文件，同时将文件加入Cache。
     * @param fileName
     * @return 命中返回文件名，未命中返回NULL。
     */
-    std::string getFileFromCache(std::string fileName);
+    string getFileFromCache(string fileName);
 
 
     /**
@@ -36,14 +41,14 @@ protected:
 	 * @param fileName
 	 * @param file
 	 */
-	 void putFileIntoCache(std::string fileName, std::string file);
+	 void putFileIntoCache(string fileName, string file);
 
     /**
     * 抽象方法。获取预测的后续文件
     * @param currentFile
     * @return	后续文件列表
     */
-    virtual std::vector<std::string> getPredictFiles(std::string currentFile) = 0;
+    virtual vector<string> getPredictFiles(string currentFile) = 0;
 };
 
 

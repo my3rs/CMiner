@@ -10,8 +10,8 @@
 
 class FileAccessLog {
 private:
-    // Log记录格式：time: ugi= ip= cmd= src=	dst= perm=
-    // 范例：2013-11-21 17:24:54,697: ugi=root	ip=/127.0.0.1	cmd=open	src=/input/access_log_1	dst=null	perm=null
+    // Log记录格式：time: ugi= ip= cmd= Miner=	dst= perm=
+    // 范例：2013-11-21 17:24:54,697: ugi=root	ip=/127.0.0.1	cmd=open	Miner=/input/access_log_1	dst=null	perm=null
     std::string time;   // 客户端访问文件的时间：yyyy-MM-dd HH:mm:ss,SSS
     std::string ugi;    // 客户端的用户标识
     std::string ip;     // 客户端的IP

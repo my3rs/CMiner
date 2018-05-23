@@ -1,11 +1,12 @@
 
 #include <fstream>
 #include <exception>
+using std::exception;
 #include "Simulator.h"
-#include "CMiner/FileAccessLog.h"
+#include "Miner/FileAccessLog.h"
 
-Simulator::Simulator(int fileCacheSize) {
-    this->FILE_CACHE = new cache::LRUCache(fileCacheSize);
+Simulator::Simulator(int fileCacheSize) : FILE_CACHE(cache::LRUCache(fileCacheSize)) {
+//    this->FILE_CACHE = cache::LRUCache(fileCacheSize);
 }
 
 std::vector<std::string> Simulator::getDataSet(std::string filePath, std::string cutCommonPrefix) {
@@ -45,9 +46,9 @@ std::string Simulator::getFileFromCache(std::string fileName) {
     try {
         targetFile = FILE_CACHE.get(fileName);
     } catch (std::range_error &e) {
-        FILE_CACHE.put(fileName);
+        FILE_CACHE.put(fileName, fileName);
         cout<<e.what()<<endl;
-        targetFile = NULL;
+        targetFile = "";
     }
     return targetFile;
 

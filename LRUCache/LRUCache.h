@@ -26,7 +26,7 @@ namespace cache {
         typedef typename std::pair<std::string, std::string> key_value_pair_t;
         typedef typename std::list<key_value_pair_t>::iterator list_iterator_t;
 
-        lru_cache(size_t max_size) :
+        LRUCache(size_t max_size) :
                 _max_size(max_size) {
         }
 

@@ -26,7 +26,7 @@ std::vector<std::string> &FileAccessLog::split( const std::string &str,
 FileAccessLog FileAccessLog::parse(std::string logLine) {
     FileAccessLog log = new FileAccessLog();
     // logPargs[0]: 2013-11-21 17:24:54,697
-    // logParts[1]: ugi=root	ip=/127.0.0.1	cmd=open	src=/input/access_log_1	dst=null	perm=null
+    // logParts[1]: ugi=root	ip=/127.0.0.1	cmd=open	Miner=/input/access_log_1	dst=null	perm=null
     // 解析出时间和日志段
 
     try {

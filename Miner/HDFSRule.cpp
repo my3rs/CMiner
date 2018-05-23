@@ -42,8 +42,12 @@ std::vector<std::string> HDFSRule::getHistory() {
     return history;
 }
 
-std::string HDFSRule::getPrediction(std::string prediction) {
+std::string HDFSRule::getPrediction() {
     return prediction;
+}
+
+void HDFSRule::setPrediction(string prediction) {
+    this->prediction = prediction;
 }
 
 void HDFSRule::setConfidence(float confidence) {
