@@ -20,7 +20,13 @@ HDFSRule::HDFSRule(std::vector<std::string> history, std::string prediction,
 
 std::ostream& operator<<(std::ostream& out, const HDFSRule & h) {
     out<<"{"
-        <<"rule="<<h.history<<"->"<<h.prediction
+        <<"rule=";
+
+    for (auto his : h.history) {
+        out<<his;
+    }
+
+    out<<"->"<<h.prediction
         <<", support="<<h.support
         <<", confidence="<<h.confidence
         <<"}";

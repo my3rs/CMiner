@@ -5,6 +5,7 @@
 #include <boost/algorithm/string.hpp>
 #include "CMinerHDFS.h"
 #include <string.h>
+#include <iostream>
 
 CMinerHDFS::CMinerHDFS() {
     windowSize = 5;

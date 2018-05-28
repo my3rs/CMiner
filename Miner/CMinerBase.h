@@ -7,9 +7,11 @@
 
 #include <ostream>
 #include <string>
-#include <list>
+using std::string;
 #include <vector>
+using std::vector;
 #include <map>
+using std::map;
 #include "Rule.h"
 
 class CMinerBase {
@@ -18,18 +20,18 @@ protected:
     int maxGap;         // 频繁子序列中两个相邻字符（事件）间的最大间隔
     int minSupport;     // 频繁子序列的最小出现次数
     float minConfidence;            // 关联规则的最小 confidence, confidence(a->b) = support(b) / support(a)
-    std::string inputSequence;      // 文件访问序列
+    string inputSequence;      // 文件访问序列
 
-//    std::list<std::string> inputSegments;               // 文件访问序列的分段，每段长度为windowSize
-    std::vector<std::string> inputSegments;
-    std::map<std::string, int> freSubsequences;         //  候选频繁子歿，对应其出现的次数 abc:4
-    std::map<std::string, int> closedFreSubsequences;   // closed frequent subsequence
-    std::map<std::string, Rule> rules;                  // 关联规则
+//    std::list<string> inputSegments;               // 文件访问序列的分段，每段长度为windowSize
+    vector<string> inputSegments;
+    map<string, int> freSubsequences;         //  候选频繁子歿，对应其出现的次数 abc:4
+    map<string, int> closedFreSubsequences;   // closed frequent subsequence
+    map<string, Rule> rules;                  // 关联规则
 
     // 按候选频繁子序列的长度进行分层，相同长度的子序列存储在同一层中，例如：
     //     freSubsequences: {abc=4, b=4, c=5, a=5, ac=5, ab=4, bc=4}
     //	   freSubsequencesTier：{1={b=4, c=5, a=5}, 2={ac=5, ab=4, bc=4}, 3={abc=4}}
-    std::map<int, std::map<std::string, int>> freSubsequencesTier;
+    map<int, map<string, int>> freSubsequencesTier;
     int maxSeqLength;               // 候选频繁子序列中，最长序列的长度
 
 
@@ -71,7 +73,7 @@ public:
 	 *
 	 * 生成:	Map<String, Rule> rules
 	 */
-	 std::map<std::string, Rule> generateRules();
+	 map<string, Rule> generateRules();
 
 
     /**
@@ -79,7 +81,7 @@ public:
     *
     * @return rules
     */
-    std::map<std::string, Rule> startMining();
+    map<string, Rule> startMining();
 
     /**
 	 * 清除List/MAP对象占用的空间，恢复初始状态
@@ -99,15 +101,15 @@ public:
     float getMinConfidence();
     void setMinConfidence(float minConfidence);
 
-    std::string getInputSequeuece();
-    void setInputSequeuece(std::string inputSequeuece);
+    string getInputSequeuece();
+    void setInputSequeuece(string inputSequeuece);
 
     /** 中间结果的getters */
-    std::vector<std::string> getInputSegments();
-    std::map<std::string, int> getFreSubsequences();
-    std::map<std::string, int> getCloseFreSubsequencs();
-    std::map<std::string, Rule> getRules();
-    std::map<int, std::map<std::string, int>> getFreSubsequencesTier();
+    vector<string> getInputSegments();
+    map<string, int> getFreSubsequences();
+    map<string, int> getCloseFreSubsequencs();
+    map<string, Rule> getRules();
+    map<int, map<string, int>> getFreSubsequencesTier();
     int getMaxSeqLength();
 
     friend std::ostream& operator<<(std::ostream& os, const CMinerBase &cb);

@@ -239,14 +239,15 @@ int CMinerBase::getMaxSeqLength() {
 
 std::ostream& operator<<(std::ostream& os, const CMinerBase & cb) {
     os <<"\n================= Generation Correlation Rules ==============\n"
-       <<"Window size:\t"<<this->windowSize<<"\n"
-       <<"Max Gap:\t"<<this->maxGap<<"\n"
-       <<"Min Support:\t"<<this->minSupport<<'\n'
-       <<"Min Confidence:\t"<<this->minConfidence<<"\n"
-       <<"Input Sequence Length:\t\t"<<this->inputSequence.length()<<"\n"
-       <<"Input Segments Length:\t\t"<<this->inputSegments.size()<<"\n"
-       <<"Frequent Subsequences:\t\t"<<this->freSubsequences<<"\n"
-       <<"Closed Frequent Subsequences:\t"<<this->closedFreSubsequences<<"\n";
+       <<"Window size:\t"<<cb.windowSize<<"\n"
+       <<"Max Gap:\t"<<cb.maxGap<<"\n"
+       <<"Min Support:\t"<<cb.minSupport<<'\n'
+       <<"Min Confidence:\t"<<cb.minConfidence<<"\n"
+       <<"Input Sequence Length:\t\t"<<cb.inputSequence.length()<<"\n"
+       <<"Input Segments Length:\t\t"<<cb.inputSegments.size()<<"\n"
+       <<"FIXME\n";
+//       <<"Frequent Subsequences:\t\t"<<cb.freSubsequences<<"\n"
+//       <<"Closed Frequent Subsequences:\t"<<cb.closedFreSubsequences<<"\n";
 
        return os;
 }
