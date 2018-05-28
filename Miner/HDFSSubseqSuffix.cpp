@@ -4,6 +4,10 @@
 
 #include "HDFSSubseqSuffix.h"
 
+HDFSSubseqSuffix::HDFSSubseqSuffix() {
+    occerTimes = 0;
+}
+
 HDFSSubseqSuffix::HDFSSubseqSuffix(std::string subsequence, int occerTimes, std::set<std::string> suffixes) {
     this->subsequence = subsequence;
     this->occerTimes = occerTimes;

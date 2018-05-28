@@ -15,6 +15,8 @@ private:
     std::set<std::string> suffixes;
 
 public:
+    HDFSSubseqSuffix();
+
     HDFSSubseqSuffix(std::string subsequence, int occerTimes, std::set<std::string> suffixes);
 
     void addSuffix(std::string suffix);

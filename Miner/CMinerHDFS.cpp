@@ -44,20 +44,20 @@ void CMinerHDFS::cutAccessSequence() {
         // 开始一个新窗口
         if (i / windowSize > winNum) {
             auto newWindow = new vector<string>;
-            newWindow->insert(inputSequence[i]);
-            inputSegments.insert(newWindow);
+            newWindow->emplace_back(inputSequence[i]);
+            inputSegments.emplace_back(newWindow);
             winNum = i / windowSize;
             delete(newWindow);
         }
         // 在旧窗口中追加访问项
         else {
-            inputSegments[winNum].insert(inputSequence[i]);
+            inputSegments[winNum].emplace_back(inputSequence[i]);
         }
     }
 }
 
 void CMinerHDFS::generateFirstDs() {
-    auto fileAccessTimes = new map<string, int>;
+    map<string, int> fileAccessTimes;
 
     // 统计每个文件访问的次数，同时记录suffix
     for (int i = 0; i < inputSegments.size(); i++) {
@@ -67,14 +67,14 @@ void CMinerHDFS::generateFirstDs() {
             string currentFile = segment[k];
 
             // 统计每个文件出现的次数
-            auto iter = fileAccessTimes->find(currentFile);
-            if (iter == fileAccessTimes->end()) {
+            auto iter = fileAccessTimes.find(currentFile);
+            if (iter == fileAccessTimes.end()) {
                 int count = 0;
-                fileAccessTimes->insert({currentFile, count+1});
+                fileAccessTimes.insert({currentFile, count+1});
             } else {
                 int count = fileAccessTimes[currentFile];
-                fileAccessTimes->erase(iter);
-                fileAccessTimes->insert({currentFile, count+1});
+                fileAccessTimes.erase(iter);
+                fileAccessTimes.insert({currentFile, count+1});
             }
 
             // 判断当前文件在当前窗口中是否被统计过
@@ -103,7 +103,7 @@ void CMinerHDFS::generateFirstDs() {
     }
 
     // 过滤掉出现次数小于minSupport的子序列
-    for (auto entry : *fileAccessTimes) {
+    for (auto entry : fileAccessTimes) {
         if (entry.second < minSupport) {
             Ds.erase(entry.first);
         } else {
@@ -112,11 +112,10 @@ void CMinerHDFS::generateFirstDs() {
         }
     }
 
-    delete(fileAccessTimes);
 }
 
 
-void CMinerHDFS::getSeqFromDs() {
+HDFSSubseqSuffix CMinerHDFS::getSeqFromDs() {
     if (Ds.empty()) {
         return nullptr;
     }
