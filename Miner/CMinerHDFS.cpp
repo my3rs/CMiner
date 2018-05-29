@@ -32,7 +32,7 @@ CMinerHDFS::CMinerHDFS(vector<string> inputSequence, int windowSize,
 
 void CMinerHDFS::cutAccessSequence() {
     // 检查输入日志序列
-    if (inputSequence.empty() || inputSequence.size() == 0) {
+    if (inputSequence.empty() || inputSequence.empty()) {
         std::cout<<"Input Sequence is null! Exit...\n";
         return;
     }
@@ -43,11 +43,11 @@ void CMinerHDFS::cutAccessSequence() {
 
         // 开始一个新窗口
         if (i / windowSize > winNum) {
-            auto newWindow = new vector<string>;
-            newWindow->emplace_back(inputSequence[i]);
+            vector<string> newWindow;
+            newWindow.clear();
+            newWindow.emplace_back(inputSequence[i]);
             inputSegments.emplace_back(newWindow);
             winNum = i / windowSize;
-            delete(newWindow);
         }
         // 在旧窗口中追加访问项
         else {
@@ -115,9 +115,9 @@ void CMinerHDFS::generateFirstDs() {
 }
 
 
-HDFSSubseqSuffix CMinerHDFS::getSeqFromDs() {
+HDFSSubseqSuffix CMinerHDFS::getSeqFromDs() throw(std::range_error) {
     if (Ds.empty()) {
-        return nullptr;
+        throw std::range_error("Ds empty!");
     }
     return Ds.begin()->second;
 }
@@ -189,9 +189,11 @@ void CMinerHDFS::candidateFreSubsequences(string currentSubseq, int occerTimes) 
     Ds.erase(currentSubseq);
 
     // 继续处理下一个
-    HDFSSubseqSuffix nextSeq = getSeqFromDs();
-    if (nextSeq != nullptr) {
+    try {
+        HDFSSubseqSuffix nextSeq = getSeqFromDs();
         candidateFreSubsequences(nextSeq.getSubsequence(), nextSeq.getOccerTimes());
+    } catch (std::range_error) {
+
     }
 
 }
@@ -260,13 +262,11 @@ void CMinerHDFS::genClosedFreSubsequences() {
 
 map<string, HDFSRule> CMinerHDFS::generateRules() {
     // 检查候选频繁子序列、Closed频繁子序列是否为空
-    if (freSubsequences.size() == 0 || freSubsequences.empty()) {
-        std::cout<<"Candidate Frequent Sequences is null! Exit...\n";
-        return;
+    if (freSubsequences.empty()|| freSubsequences.empty()) {
+        throw std::range_error("Candidate Frequent Sequences is null! Exit...");
     }
-    if (closedFreSubsequences.size() == 0 || closedFreSubsequences.empty()) {
-        std::cout<<"Closed Frequent Sequences is null! Exit...\n";
-        return;
+    if (closedFreSubsequences.empty() || closedFreSubsequences.empty()) {
+        throw std::range_error("Closed Frequent Sequences is null! Exit...");
     }
 
     // 依次处理每一个closed frequent subsequence，获取rules
@@ -289,7 +289,7 @@ map<string, HDFSRule> CMinerHDFS::generateRules() {
             for  (int historyEnd = historyStart + 1; historyEnd < accessFiles.size(); historyEnd ++) {
                 vector<string> historyList;
                 for (int j = historyStart; j < historyEnd; ++j) {
-                    historyList.insert(accessFiles[i]);
+                    historyList.emplace_back(accessFiles[j]);
                 }
                 string historyStr = boost::algorithm::join(historyList, "|");
                 float historyConf = freSubsequences[historyStr] * 1.0f;
@@ -389,8 +389,15 @@ map<string, HDFSRule> CMinerHDFS::startMining() {
     generateFirstDs();
 
     // 挖掘：频繁子序列
-    HDFSSubseqSuffix ss = getSeqFromDs();
-    candidateFreSubsequences(ss.getSubsequence(), ss.getOccerTimes());
+    try {
+        HDFSSubseqSuffix ss = getSeqFromDs();
+        candidateFreSubsequences(ss.getSubsequence(), ss.getOccerTimes());
+    } catch (std::range_error e) {
+        std::cout<<e.what();
+        exit(-1);
+    }
+
+
 
     // 过滤：Closed频繁子序列
     genClosedFreSubsequences();
@@ -416,7 +423,7 @@ int CMinerHDFS::getMaxGap() {
 }
 
 void CMinerHDFS::setMaxGap(int maxGap) {
-    return maxGap;
+    this->maxGap = maxGap;
 }
 
 int CMinerHDFS::getMinSupport() {
@@ -473,7 +480,7 @@ int CMinerHDFS::getMaxSeqLength() {
     return maxSeqLength;
 }
 
-friend std::ostream&operator<<(std::ostream& out, const CMinerHDFS &cm) {
+std::ostream&operator<<(std::ostream& out, const CMinerHDFS &cm) {
     out<<"\n============ Generating Corrlation Rules ==============\n"
        <<"Window Size:\t"<<cm.windowSize<<"\n"
        <<"Max Gap:\t"<<cm.maxGap<<"\n"
@@ -484,12 +491,10 @@ friend std::ostream&operator<<(std::ostream& out, const CMinerHDFS &cm) {
        <<"Input Segments Length:\t\t"<<cm.inputSegments.size()<<"\n"
        <<"Frequent Subsequences:\t\t[";
     for (auto &entry : cm.freSubsequences) {
-        for (auto &e : entry) {
-            out<<e<<" ";
-        }
+        out<<entry.first<<entry.second;
         out<<',';
     }
-    out<<']\n';
+    out<<"]\n";
 
     out<<"Closed Frequent Subsequencs:\t[";
     for (auto &entry : cm.closedFreSubsequences) {

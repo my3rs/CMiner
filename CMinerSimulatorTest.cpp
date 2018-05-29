@@ -1,5 +1,7 @@
-#include <zconf.h>
+//#include <zconf.h>
 #include <iostream>
+#include <unistd.h>
+
 using std::cout;
 using std::endl;
 #include "CMinerSimulator.h"

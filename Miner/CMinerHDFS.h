@@ -65,7 +65,7 @@ public:
     /**
 	 * 从Ds集合中挑选出一个子序列，作为处理使用
 	 */
-	 HDFSSubseqSuffix getSeqFromDs();
+	 HDFSSubseqSuffix getSeqFromDs() throw(std::range_error);
 
     /**
     * DFS 产生候选频繁子序列集合（Frequent Subsequences），满足：

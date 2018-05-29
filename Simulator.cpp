@@ -18,7 +18,7 @@ std::vector<std::string> Simulator::getDataSet(std::string filePath, std::string
             if (log.isValid()) {
                 if(!cutCommonPrefix.empty()) {
                     std::string src = log.getSrc();
-                    if (src.find_first_of(cutCommonPrefix) > -1) {
+                    if (src.find(cutCommonPrefix) != string::npos) {
                         src.erase(src.find(cutCommonPrefix), cutCommonPrefix.size());
                         logs.push_back(src);
                     }

@@ -26,10 +26,11 @@ FileAccessLog FileAccessLog::parse(string logLine) {
 
     try {
         uint64_t timeEnd = logLine.find(": ");
-        cout<<"time: "<<logLine.substr(0, timeEnd)<<endl;
+        log.setTime(logLine.substr(0, timeEnd));
+//        cout<<"time: "<<logLine.substr(0, timeEnd)<<endl;
 
         string info = logLine.substr(timeEnd+2);
-        cout<<"info: "<<info<<endl;
+//        cout<<"info: "<<info<<endl;
         vector<string> infoParts;
 
         boost::split(infoParts, info, boost::algorithm::is_any_of("\t"), boost::token_compress_on);
@@ -41,7 +42,7 @@ FileAccessLog FileAccessLog::parse(string logLine) {
         log.setPerm(infoParts[5].substr(infoParts[5].find('=')+1));
 
         // 只提取只读的OPEN操作
-        if (!strcasecmp(log.getCmd().c_str(), "open")) {
+        if (strcasecmp(log.getCmd().c_str(), "open")) {
             log.setValid(false);
         }
     }
