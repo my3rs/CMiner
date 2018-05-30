@@ -28,12 +28,6 @@ int main(int argc, char* argv[]) {
             string targetFile = simulator.getFileFromCache(currentFile);
             // Miss
             if (targetFile.empty()) {
-                // time of getting file from disk
-                try {
-                    sleep(1);
-                } catch (...) {
-                    std::cout<<"Exception!\n";
-                }
 
                 // read miss causes prediction
                 for (string file : simulator.getPredictFiles(currentFile)) {
@@ -50,6 +44,6 @@ int main(int argc, char* argv[]) {
         }
 
         // 输出命中率
-        cout<<hitCount*1.0/logs.size()<<endl;
+        cout<<"Hit ratio of LRU Cache with CMiner: "<<hitCount*1.0/logs.size()<<endl;
     }
 }

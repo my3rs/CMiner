@@ -67,7 +67,7 @@ vector<string> CMinerSimulator::getPredictFiles(string currentFile) {
     }
 
     vector<string> predictSuffixes;
-    if (nextFile.empty()) {
+    if (!nextFile.empty()) {
         predictSuffixes.emplace_back(nextFile);
     }
 
