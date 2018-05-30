@@ -115,7 +115,7 @@ void CMinerHDFS::generateFirstDs() {
 }
 
 
-HDFSSubseqSuffix CMinerHDFS::getSeqFromDs() throw(std::range_error) {
+HDFSSubseqSuffix CMinerHDFS::getSeqFromDs() /* throw(std::range_error) */{
     if (Ds.empty()) {
         throw std::range_error("Ds empty!");
     }
