@@ -1,7 +1,3 @@
-//
-// Created by cyril on 3/15/18.
-//
-
 #ifndef CMINER_CMINERBASE_H
 #define CMINER_CMINERBASE_H
 
