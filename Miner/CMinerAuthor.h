@@ -26,7 +26,8 @@ private:
 
 public:
     CMinerAuthor() : CMinerBase() {}
-
+    CMinerAuthor(string inputSequence, int windowSize, int maxGap, int minSupport, float minConfidence);
+    void candidateFreSubsequences();
 
 };
 
