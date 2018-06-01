@@ -1,8 +1,6 @@
 #include "CMinerMy.h"
 
 
-
-
 void CMinerMy::candidateFreSubsequences() {
     // 检查文件访问序列的分段是否为空
     if (inputSegments.empty() || inputSegments.size() == 0) {
