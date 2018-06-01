@@ -44,7 +44,7 @@ std::string Simulator::getFileFromCache(std::string fileName) {
         targetFile = FILE_CACHE.get(fileName);
     } catch (std::range_error &e) {
         FILE_CACHE.put(fileName, fileName);
-        cout<<e.what()<<endl;
+//        cout<<e.what()<<endl;
         targetFile = "";
     }
     return targetFile;

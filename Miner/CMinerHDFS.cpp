@@ -89,11 +89,11 @@ void CMinerHDFS::generateFirstDs() {
             }
 
             // 记录suffix
-            string suffix = "";
-            for (int j = start + 1; j < segment.size(); j++) {
-                suffix += segment[j];
-                suffix += "|";
-            }
+            string suffix = boost::algorithm::join(segment, "|");
+//            for (int j = start + 1; j < segment.size(); j++) {
+//                suffix += segment[j];
+//                suffix += "|";      // todo: there may be something wrong when we get to the last segment
+//            }
             if (Ds.find(currentFile) == Ds.end()) {
                 Ds.insert({currentFile, HDFSSubseqSuffix()});
             }
@@ -125,7 +125,7 @@ HDFSSubseqSuffix CMinerHDFS::getSeqFromDs() /* throw(std::range_error) */{
 void CMinerHDFS::candidateFreSubsequences(string currentSubseq, int occerTimes) {
 
     // 添加当前序列至 候选频繁子序列集合中
-    freSubsequences.insert({currentSubseq, occerTimes});
+    freSubsequences.emplace(currentSubseq, occerTimes);
 
     // 添加当前序列至 候选频发子序列对应的长度层次中
     vector<string> vtmp;
@@ -135,9 +135,9 @@ void CMinerHDFS::candidateFreSubsequences(string currentSubseq, int occerTimes) 
         maxSeqLength = seqLen;
     }
     if(freSubsequencesTier.find(seqLen) == freSubsequencesTier.end()) {
-        freSubsequencesTier.insert({seqLen, map<string, int>()});
+        freSubsequencesTier.emplace(seqLen, map<string, int>());
     }
-    freSubsequencesTier[seqLen].insert({currentSubseq, occerTimes});
+    freSubsequencesTier[seqLen].emplace(currentSubseq, occerTimes);
 
     // 获取当前序列的后缀集合
     set<string> currentDs = Ds[currentSubseq].getSuffixes();
@@ -291,7 +291,7 @@ map<string, HDFSRule> CMinerHDFS::generateRules() {
                 for (int j = historyStart; j < historyEnd; ++j) {
                     historyList.emplace_back(accessFiles[j]);
                 }
-                string historyStr = boost::algorithm::join(historyList, "|");
+                string historyStr = boost::algorithm::join(historyList, "|");   // todo: join is to be tested weather the last one will JOIN
                 float historyConf = freSubsequences[historyStr] * 1.0f;
 
                 // 生成prediction子序列（只有一个文件）
