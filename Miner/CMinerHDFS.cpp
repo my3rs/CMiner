@@ -60,22 +60,13 @@ void CMinerHDFS::generateFirstDs() {
     map<string, int> fileAccessTimes;
 
     // 统计每个文件访问的次数，同时记录suffix
-    for (int i = 0; i < inputSegments.size(); i++) {
-        vector<string> segment = inputSegments[i];
-
+    for (auto segment : inputSegments) {
         for (int k = 0; k < segment.size(); k++) {
             string currentFile = segment[k];
 
             // 统计每个文件出现的次数
-            auto iter = fileAccessTimes.find(currentFile);
-            if (iter == fileAccessTimes.end()) {
-                int count = 0;
-                fileAccessTimes.insert({currentFile, count+1});
-            } else {
-                int count = fileAccessTimes[currentFile];
-                fileAccessTimes.erase(iter);
-                fileAccessTimes.insert({currentFile, count+1});
-            }
+            int count = fileAccessTimes.find(currentFile) == fileAccessTimes.end() ? 0 : fileAccessTimes[currentFile];
+            fileAccessTimes[currentFile] = count + 1;
 
             // 判断当前文件在当前窗口中是否被统计过
             int start = 0;
@@ -89,13 +80,13 @@ void CMinerHDFS::generateFirstDs() {
             }
 
             // 记录suffix
-            string suffix = boost::algorithm::join(segment, "|");
-//            for (int j = start + 1; j < segment.size(); j++) {
-//                suffix += segment[j];
-//                suffix += "|";      // todo: there may be something wrong when we get to the last segment
-//            }
+            string suffix;
+            for (int j = start + 1; j < segment.size(); j++) {
+                suffix += segment[j];
+                suffix += "|";
+            }
             if (Ds.find(currentFile) == Ds.end()) {
-                Ds.insert({currentFile, HDFSSubseqSuffix()});
+                Ds.emplace(currentFile, HDFSSubseqSuffix());
             }
             Ds[currentFile].addSuffix(suffix);
 
