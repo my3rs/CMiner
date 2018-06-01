@@ -90,7 +90,7 @@ void testByStep(string filePath) {
     miner.candidateFreSubsequences(ss.getSubsequence(), ss.getOccerTimes());
     cout << "=== frequent subsequences:\n";
     for (auto entry : miner.getFreSubsequences()) {
-        cout << entry.first << "=" << entry.second << ",";
+        cout << entry.first << "=" << entry.second << ", ";
     }
     cout << "\n\n";
 
@@ -98,7 +98,7 @@ void testByStep(string filePath) {
     miner.genClosedFreSubsequences();
     cout << "=== closed frequent subsequences:\n";
     for (auto entry : miner.getClosedFreSubsequences()) {
-        cout << entry.first << "=" << entry.second << ",";
+        cout << entry.first << "=" << entry.second << ", ";
     }
     cout << "\n\n";
 
