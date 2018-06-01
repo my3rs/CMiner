@@ -26,14 +26,13 @@ static CMinerHDFS miner;
  * Read logs from filePath
  * parse them into FileAccessLog object list
  **/
-vector<string>&& getLogs(const string filePath) {
+vector<string> getLogs(const string filePath) {
     vector<string> logs;
 
     ifstream infile(filePath);
     string line;
 
     try {
-
         while(std::getline(infile, line)) {
             FileAccessLog log = FileAccessLog::parse(line);
             if (log.isValid()) {
@@ -50,6 +49,7 @@ vector<string>&& getLogs(const string filePath) {
     }
 
     infile.close();
+    return logs;
 }
 
 
@@ -109,7 +109,6 @@ void testByStep(string filePath) {
         cout << entry.first << "\n";
     }
     miner.clear();
-
 }
 
 int main(int argc, char* argv[]) {
