@@ -14,3 +14,6 @@ TARGET_LINK_LIBRARIES(CMinerHDFSTest lru_cache miner)
 
 ADD_EXECUTABLE(CMinerAuthorTest CMinerAuthorTest.cpp)
 TARGET_LINK_LIBRARIES(CMinerAuthorTest miner_author)
+
+
+ADD_EXECUTABLE(NonPredictSimulator NonPredictSimulator.cpp)
