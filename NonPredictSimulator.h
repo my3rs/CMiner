@@ -8,6 +8,10 @@
 #include "Simulator.h"
 
 class NonPredictSimulator : public Simulator {
+public:
+    explicit NonPredictSimulator(int fileCacheSize) : Simulator(fileCacheSize) {}
+    vector<string> getPredictFiles(string currentFile) override ;
+
 
 };
 
