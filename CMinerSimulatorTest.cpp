@@ -26,8 +26,7 @@ int main(int argc, char* argv[]) {
         int hitCount = 0;
         int prefetchCount = 0;
         clock_t totalTime = 0;
-        for (int i = 0; i < logs.size(); i++) {
-            string currentFile = logs[i];
+        for (const string &currentFile : logs) {
 
             clock_t start = clock();
             string targetFile = simulator.getFileFromCache(currentFile);
@@ -35,13 +34,13 @@ int main(int argc, char* argv[]) {
             if (targetFile.empty()) {
 
                 // read miss causes prediction
-                for (string file : simulator.getPredictFiles(currentFile)) {
+                for (const string &file : simulator.getPredictFiles(currentFile)) {
                     simulator.putFileIntoCache(file, file);
                     prefetchCount ++;
                 }
             }
             // Hit
-             else {
+            else {
                 hitCount ++;
             }
             clock_t end = clock();
@@ -49,7 +48,7 @@ int main(int argc, char* argv[]) {
         }
 
         // 输出命中率
-        cout<<"Hit ratio of LRU Cache with CMiner: "<<hitCount*1.0/logs.size()<<endl;
+        cout << "Cache size: " << fileCacheSize << "\t" << "Hit ratio: " << hitCount * 1.0 / logs.size() << endl;
     }
 //    logs.clear();
 }
