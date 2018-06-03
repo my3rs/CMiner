@@ -30,6 +30,8 @@ public:
     void setPrediction(std::string prediction);
     void setSupport(int support);
     void setConfidence(float confidence);
+
+    friend std::ostream& operator<<(std::ostream& os, const Rule &r);
 };
 
 

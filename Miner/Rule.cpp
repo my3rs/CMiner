@@ -55,3 +55,9 @@ void Rule::setPrediction(std::string prediction) {
 void Rule::setSupport(int support) {
     this->support = support;
 }
+
+std::ostream& operator<<(std::ostream& out, const Rule  &r) {
+    out << "rule=" << r.history << "->" << r.prediction << ", support=" << r.support << ", confidence=" << r.confidence
+        << "}";
+    return out;
+}
