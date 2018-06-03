@@ -77,12 +77,12 @@ public:
     *
     * @return rules
     */
-    map<string, Rule> startMining();
+    virtual map<string, Rule> startMining();
 
     /**
 	 * 清除List/MAP对象占用的空间，恢复初始状态
 	 */
-    void clear();
+    virtual void clear();
 
     /** 算法参数的 getters and setters */
     int getWindowSize();

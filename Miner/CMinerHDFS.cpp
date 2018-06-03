@@ -83,7 +83,8 @@ void CMinerHDFS::generateFirstDs() {
             string suffix;
             for (int j = start + 1; j < segment.size(); j++) {
                 suffix += segment[j];
-                suffix += "|";
+                if (j < segment.size() - 1)
+                    suffix += "|";
             }
             if (Ds.find(currentFile) == Ds.end()) {
                 Ds.emplace(currentFile, HDFSSubseqSuffix());
@@ -154,15 +155,29 @@ void CMinerHDFS::candidateFreSubsequences(string currentSubseq, int occerTimes) 
                 vector<string> suffixFiles;
                 boost::split(suffixFiles, suffix, boost::is_any_of("|"), boost::token_compress_on);
 
-                for (int i = 0; i < suffixFiles.size() && i <= maxGap; i++) {
-                    if (i == suffixFiles.size() - 1) {
+                for (auto iter = suffixFiles.begin(); iter != suffixFiles.end(); iter ++) {
+                    if ((*iter).empty()) {
+                        suffixFiles.erase(iter);
+                        iter --;
+                        continue;
+                    }
+                    if (iter == suffixFiles.end() -1) {
                         endCount ++;
-                    } else if (strcasecmp(suffixFiles[i].c_str(), file.c_str()) == 0) {
-                        // todo : there may be some thing wrong
-                        newDs.insert(suffix.substr(suffix.find(suffixFiles[i+1])));
+                    } else if (strcasecmp((*iter).c_str(), file.c_str()) == 0) {
+                        newDs.emplace(suffix.substr(suffix.find(*(iter+1))));
                         break;
                     }
                 }
+
+//                for (int i = 0; i < suffixFiles.size() && i <= maxGap; i++) {
+//                    if (i == suffixFiles.size() - 1) {
+//                        endCount ++;
+//                    } else if (strcasecmp(suffixFiles[i].c_str(), file.c_str()) == 0) {
+//                        // todo : there may be some thing wrong
+//                        newDs.insert(suffix.substr(suffix.find(suffixFiles[i+1])));
+//                        break;
+//                    }
+//                }
             }
         }
 
