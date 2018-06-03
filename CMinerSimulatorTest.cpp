@@ -6,12 +6,26 @@ using std::cout;
 using std::endl;
 #include "CMinerSimulator.h"
 
+
+vector<string> getRandomStr(int length) {
+    string baseStr = "abcdefghijklmnopqrstuvwxyz";
+    vector<string> ret;
+    int range = baseStr.size();
+    for (int i = 0; i < length; i++) {
+        ret.emplace_back(baseStr.substr(lrand48() % range, 1));
+    }
+
+    return ret;
+}
+
+
 int main(int argc, char* argv[]) {
+    vector<string> logs = getRandomStr(600);
     for (int fileCacheSize = 1; fileCacheSize <= 50; fileCacheSize ++) {
         CMinerSimulator simulator(fileCacheSize);
 
         // 获取数据集
-        vector<string> logs = simulator.getDataSet("./audit.log", "/user/root/input/sogou/query-log-");
+//        vector<string> logs = simulator.getDataSet("./audit.log", "/user/root/input/sogou/query-log-");
 
         // 生成关联规则
         simulator.setDataSet(logs);
@@ -46,4 +60,5 @@ int main(int argc, char* argv[]) {
         // 输出命中率
         cout<<"Hit ratio of LRU Cache with CMiner: "<<hitCount*1.0/logs.size()<<endl;
     }
+    logs.clear();
 }

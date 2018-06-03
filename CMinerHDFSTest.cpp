@@ -22,6 +22,10 @@ using std::vector;
 static string LOG_PATH = "./audit.log";
 static CMinerHDFS miner;
 
+
+
+
+
 /**
  * Read logs from filePath
  * parse them into FileAccessLog object list
