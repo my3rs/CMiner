@@ -24,10 +24,33 @@ private:
     // Store frequent subsequence's suffix with max length in segments.
     map<string, SubseqnenceSuffix> Ds;
 
+    // 从输入的segments中计算出长度为1的频繁子序列集合，并返回
+    set<string> generateOneCharFreSubseq(set<string>  segments);
+
 public:
     CMinerAuthor() : CMinerBase() {}
     CMinerAuthor(string inputSequence, int windowSize, int maxGap, int minSupport, float minConfidence);
-    void candidateFreSubsequences();
+    void candidateFreSubsequences() override ;
+    map<string, Rule> startMining();
+    void clear();
+    /* generate frequent sequence of length 1 and suffix of each frequent subsequence
+     * produce map<string, SubsequenceSuffix> Ds
+     * */
+    void generateFirstDs();
+
+    /* abstract method: DFS generate Frequent Subsequences  :
+     * 1) access subsequences with a distance of no more than maxGap(not necessarily continuous)
+     * 2) occurrence > minSupport
+     *
+     * @return
+     * map<string, int> freSubsequences
+     * map<int, map<string, int>> freSubsequencesTier
+     *
+     * */
+    void candidateFreSubsequences(string currentSubseq, int occurTimes);
+
+    SubseqnenceSuffix getSeqFromDs();
+
 
 };
 
