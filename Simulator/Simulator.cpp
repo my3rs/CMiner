@@ -3,7 +3,7 @@
 #include <exception>
 using std::exception;
 #include "Simulator.h"
-#include "Miner/FileAccessLog.h"
+#include "../Miner/FileAccessLog.h"
 
 
 std::vector<std::string> Simulator::getDataSet(std::string filePath, std::string cutCommonPrefix) {

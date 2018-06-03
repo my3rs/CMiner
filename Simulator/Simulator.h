@@ -13,7 +13,7 @@ using std::endl;
 using std::vector;
 #include <string>
 using std::string;
-#include "LRUCache/LRUCache.h"
+#include "../LRUCache/LRUCache.h"
 
 class Simulator {
 public:

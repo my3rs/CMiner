@@ -4,7 +4,7 @@
 
 using std::cout;
 using std::endl;
-#include "CMinerSimulator.h"
+#include "Simulator/CMinerSimulator.h"
 #include "Utils/Utils.h"
 
 
