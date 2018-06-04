@@ -44,11 +44,11 @@ void Rule::setConfidence(float confidence) {
     this->confidence = confidence;
 }
 
-void Rule::setHistory(std::string history) {
+void Rule::setHistory(std::string &history) {
     this->history = history;
 }
 
-void Rule::setPrediction(std::string prediction) {
+void Rule::setPrediction(std::string &prediction) {
     this->prediction = prediction;
 }
 

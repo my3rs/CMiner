@@ -26,8 +26,8 @@ public:
     int getSupport();
     float getConfidence();
 
-    void setHistory(std::string history);
-    void setPrediction(std::string prediction);
+    void setHistory(std::string &history);
+    void setPrediction(std::string &prediction);
     void setSupport(int support);
     void setConfidence(float confidence);
 
