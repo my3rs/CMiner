@@ -10,6 +10,7 @@ using std::vector;
 class Utils {
 public:
     static vector<string> getRandomLogs(int length);
+    static string getRandomStr(int length);
 };
 
 
