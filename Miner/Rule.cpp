@@ -57,7 +57,7 @@ void Rule::setSupport(int support) {
 }
 
 std::ostream& operator<<(std::ostream& out, const Rule  &r) {
-    out << "rule=" << r.history << "->" << r.prediction << ", support=" << r.support << ", confidence=" << r.confidence
+    out << "{rule=" << r.history << "->" << r.prediction << ", support=" << r.support << ", confidence=" << r.confidence
         << "}";
     return out;
 }
