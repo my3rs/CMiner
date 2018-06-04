@@ -12,8 +12,6 @@ CMinerBase::CMinerBase() {
     this->minConfidence = 1.0f;
     this->maxSeqLength = 0;
 
-    // 创建对象
-//    this->inputSegments = new std::vector<std::string>;
 }
 
 void CMinerBase::cutAccessSequence() {
@@ -28,8 +26,8 @@ void CMinerBase::cutAccessSequence() {
     int end = start + windowSize;
 
     while (end < inputSequence.length()) {
-        // TODO in java: and, in C++ widowSize. so end is not used
-        inputSegments.push_back(inputSequence.substr(start, windowSize));
+        inputSegments.emplace_back(inputSequence.substr(start, windowSize));
+        start = end;
         end += windowSize;
     }
     inputSegments.push_back(inputSequence.substr(start));
