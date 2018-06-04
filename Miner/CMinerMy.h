@@ -14,7 +14,7 @@ public:
     CMinerMy() : CMinerBase() {};
     CMinerMy(std::string inputSequence, int windowSize, int maxGap, int minSupport, float minConfidence)
             : CMinerBase(inputSequence, windowSize, maxGap, minSupport, minConfidence) {}
-    void candidateFreSubsequences();
+    void candidateFreSubsequences() override ;
 };
 
 

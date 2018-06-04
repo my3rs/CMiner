@@ -14,17 +14,16 @@ void CMinerMy::candidateFreSubsequences() {
     // 子序列长度没有限制，因此最大可以为windowSize，因此执行windowSize轮扫描
     while (++currentSeqLen <= windowSize) {
         // 挖掘关联子序列
-        for (std::string segment : inputSegments) {
+        for (const std::string &segment : inputSegments) {
             // 初始第一轮扫描，获取最基础（每个字符）的出现次数
             if (1 == currentSeqLen) {
                 for (int i = 0; i < segment.length(); i++) {
                     string oneCharStr = segment.substr(i, 1);
                     int count = newSequencs.find(oneCharStr) == newSequencs.end()
                                 ? 0 : newSequencs[oneCharStr];
-                    newSequencs.insert({oneCharStr, count + 1});
+                    newSequencs[oneCharStr] = count + 1;
                 }
             }
-
             // length > 1的序列挖掘
             else {
                 for (auto &entry : freSubsequences) {
@@ -44,7 +43,7 @@ void CMinerMy::candidateFreSubsequences() {
                     for (char c : v_prefix) {
                         lastPos = pos;
                         pos = segment.find(c);
-                        if (pos < 0 || pos <= lastPos) {
+                        if (pos == string::npos || pos <= lastPos) {
                             break;
                         }
                     }
@@ -53,7 +52,7 @@ void CMinerMy::candidateFreSubsequences() {
                     }
 
                     // 以prefix为关联序列开始，在segment中继续延伸关联序列
-                    for (int i = pos + 1; i < segment.length() && (i - pos - 1) <= getMaxGap(); i++) {
+                    for (int i = pos + 1; i < segment.length() && (i - pos - 1) <= maxGap; i++) {
                         std::string oneCharStr = segment.substr(i, 1);
                         if (prefix.find(oneCharStr) != std::string::npos) {
                             continue;
@@ -62,7 +61,7 @@ void CMinerMy::candidateFreSubsequences() {
                         std::string newSeq = prefix + oneCharStr;
                         int count = newSequencs.find(newSeq) == newSequencs.end()
                                     ? 0 : newSequencs[newSeq];
-                        newSequencs.insert({newSeq, count + 1});
+                        newSequencs[newSeq] = count + 1;
                     }
                 }
             }
@@ -75,15 +74,14 @@ void CMinerMy::candidateFreSubsequences() {
         }
 
         // 添加层次为currentSeqLen的subsequenceTier元素
-        std::map<std::string, int> tierMap;
-        freSubsequences.insert({currentSeqLen, tierMap});
+        freSubsequencesTier.emplace(currentSeqLen, std::map<std::string, int>());
 
         // 将newSequences添加到subSequences、根据subSequence长度划分的Map中
         for (auto& entry : newSequencs) {
-            freSubsequences.insert({entry.first, entry.second});
+            freSubsequences.emplace(entry.first, entry.second);
 
             // 对得到的frequent subsequence根据subsequence的长度进行分组
-            freSubsequencesTier.find(currentSeqLen).insert({entry.first, entry.second});
+            freSubsequencesTier[currentSeqLen].emplace(entry.first, entry.second);
         }
 
         // 更新最长序列的长度记录
@@ -92,7 +90,5 @@ void CMinerMy::candidateFreSubsequences() {
         newSequencs.clear();
 
     }
-
-
 
 }

@@ -14,8 +14,12 @@ ADD_EXECUTABLE(CMinerHDFSTest CMinerHDFSTest.cpp)
 TARGET_LINK_LIBRARIES(CMinerHDFSTest lru_cache miner_hdfs)
 
 ADD_EXECUTABLE(CMinerAuthorTest CMinerAuthorTest.cpp)
-TARGET_LINK_LIBRARIES(CMinerAuthorTest miner_author)
+TARGET_LINK_LIBRARIES(CMinerAuthorTest miner_author utils)
+
+ADD_EXECUTABLE(CMinerMyTest CMinerMyTest.cpp)
+TARGET_LINK_LIBRARIES(CMinerMyTest miner_my utils)
 
 
 ADD_EXECUTABLE(NonPredictSimulatorTest NonPredictSimulatorTest.cpp Simulator/NonPredictSimulator.cpp Simulator/Simulator.cpp)
 TARGET_LINK_LIBRARIES(NonPredictSimulatorTest miner_base)
+
