@@ -20,9 +20,9 @@ string getRandomStr(int length) {
 
 
 void testByStep(string seqence) {
+    clock_t start = clock();
     miner.setInputSequeuece(seqence);
 
-    clock_t start = clock();
     miner.cutAccessSequence();
     miner.generateFirstDs();
 
@@ -33,6 +33,7 @@ void testByStep(string seqence) {
     miner.genClosedFreSubsequences();   // filter: close frequent subsequence
     miner.generateRules();
     clock_t end = clock();
+
 
     cout << "================== Generating Corrlation Rules ======================\n";
     cout << "Window size:\t" << miner.getWindowSize() << "\n";
@@ -54,11 +55,11 @@ void testByStep(string seqence) {
     cout << "\b}\n";
     cout << "Rules Numer:\t" << miner.getRules().size() <<"\n";
     for (const auto &entry : miner.getRules()) {
-        cout << entry.first << "=" << entry.second << "\n";
+        cout << "\t" << entry.first << "=" << entry.second << "\n";
 
     }
 
-    cout << "Mining Time: " << (end - start) / CLOCKS_PER_SEC << "\n";
+    cout << "Mining Time: " << (end - start)*1.0 / CLOCKS_PER_SEC << " s.\n";
 
     miner.clear();
 }
