@@ -33,6 +33,7 @@ protected:
 
 public:
     CMinerBase();
+    CMinerBase(string inputSeqence, int windowSize, int maxGap, int minSupport, float minConfidence);
 
     /**
 	 * 采用non-overlapped cutting方法将访问序列划分为多个固定长度的短序列片段。

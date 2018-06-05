@@ -14,6 +14,14 @@ CMinerBase::CMinerBase() {
 
 }
 
+CMinerBase::CMinerBase(string inputSeqence, int windowSize, int maxGap, int minSupport, float minConfidence) {
+    this->inputSequence = inputSeqence;
+    this->windowSize =  windowSize;
+    this->maxGap = maxGap;
+    this->minSupport = minSupport;
+    this->minConfidence = minConfidence;
+}
+
 void CMinerBase::cutAccessSequence() {
     // 检查输入字符串是否合法
     if (inputSequence.empty()) {
