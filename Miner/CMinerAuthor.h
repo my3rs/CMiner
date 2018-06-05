@@ -31,8 +31,8 @@ public:
     CMinerAuthor() : CMinerBase() {}
     CMinerAuthor(string inputSequence, int windowSize, int maxGap, int minSupport, float minConfidence);
     void candidateFreSubsequences() override ;
-    map<string, Rule> startMining();
-    void clear();
+    map<string, Rule> startMining() override ;
+    void clear() override ;
     /* generate frequent sequence of length 1 and suffix of each frequent subsequence
      * produce map<string, SubsequenceSuffix> Ds
      * */

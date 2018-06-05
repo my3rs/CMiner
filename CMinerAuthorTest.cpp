@@ -4,20 +4,9 @@ using std::string;
 #include <iostream>
 using std::cout;
 #include "Miner/CMinerAuthor.h"
+#include "Utils/Utils.h"
 
 static CMinerAuthor miner;
-
-string getRandomStr(int length) {
-    string baseStr = "abcdefghijklmnopqrstuvwxyz";
-    string ret;
-    int range = baseStr.size();
-    for (int i = 0; i < length; i++) {
-        ret += baseStr[lrand48() % range];
-    }
-
-    return ret;
-}
-
 
 void testByStep(string seqence) {
     clock_t start = clock();
@@ -66,7 +55,7 @@ void testByStep(string seqence) {
 
 int main(int argc, char* argv[]) {
     // 输出关联关系挖掘过程中的每一步中间结果
-    string seqence = getRandomStr(100000);
+    string seqence = Utils::getRandomStr(100000);
 
     testByStep(seqence);
 }

@@ -161,7 +161,7 @@ void CMinerHDFS::candidateFreSubsequences(string currentSubseq, int occerTimes) 
                         iter --;
                         continue;
                     }
-                    if (iter == suffixFiles.end() -1) {
+                    if (iter == suffixFiles.end() - 1) {    // the last one
                         endCount ++;
                     } else if (strcasecmp((*iter).c_str(), file.c_str()) == 0) {
                         newDs.emplace(suffix.substr(suffix.find(*(iter+1))));
