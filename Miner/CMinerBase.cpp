@@ -4,23 +4,11 @@
 
 #include "CMinerBase.h"
 
-CMinerBase::CMinerBase() {
-    // 设置默认参数
-    this->windowSize = 5;
-    this->maxGap = this->windowSize - 2;
-    this->minSupport = 4;
-    this->minConfidence = 1.0f;
-    this->maxSeqLength = 0;
 
-}
 
-CMinerBase::CMinerBase(string inputSeqence, int windowSize, int maxGap, int minSupport, float minConfidence) {
-    this->inputSequence = inputSeqence;
-    this->windowSize =  windowSize;
-    this->maxGap = maxGap;
-    this->minSupport = minSupport;
-    this->minConfidence = minConfidence;
-}
+CMinerBase::CMinerBase(string inputSeqence, int windowSize, int maxGap, int minSupport, float minConfidence, int maxSeqLength)
+    : inputSequence(inputSeqence), windowSize(windowSize), maxGap(maxGap),
+      minSupport(minSupport), minConfidence(minConfidence), maxSeqLength(maxSeqLength) {}
 
 void CMinerBase::cutAccessSequence() {
     // 检查输入字符串是否合法
