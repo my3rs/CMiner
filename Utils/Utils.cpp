@@ -2,7 +2,7 @@
 
 
 vector<string> Utils::getRandomLogs(int length) {
-    string baseStr = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    string baseStr = "abcdefghijklmnopqrstuvwxyz";
     vector<string> ret;
     int range = baseStr.size();
     for (int i = 0; i < length; i++) {
@@ -13,7 +13,7 @@ vector<string> Utils::getRandomLogs(int length) {
 }
 
 string Utils::getRandomStr(int length) {
-    string baseStr = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    string baseStr = "abcdefghijklmnopqrstuvwxyz";
     string ret = "";
     int range = baseStr.size();
     for (int i = 0; i < length; i++) {
