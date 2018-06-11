@@ -4,7 +4,7 @@
 
 #include <boost/algorithm/string.hpp>
 #include "CMinerHDFS.h"
-#include <string.h>
+#include <cstring>
 #include <iostream>
 
 CMinerHDFS::CMinerHDFS() {
@@ -75,6 +75,7 @@ void CMinerHDFS::generateFirstDs() {
                     break;
                 }
             }
+            // 如果当前文件在当前窗口中统计过，直接跳过
             if (start != k || start == segment.size() - 1) {
                 continue;
             }
@@ -138,7 +139,7 @@ void CMinerHDFS::candidateFreSubsequences(string currentSubseq, int occerTimes) 
     set<string> oneFileFreSubseqs = generateOneCharFreSubseq(currentDs);
 
     // 一次扫描每一个后缀集合中 只包含1个文件的频繁子序列
-    for (auto file : oneFileFreSubseqs) {
+    for (const auto &file : oneFileFreSubseqs) {
 
         // 类似AA这种不检测
         if (strcasecmp(currentSubseq.c_str(), file.c_str()) == 0) {
@@ -150,34 +151,20 @@ void CMinerHDFS::candidateFreSubsequences(string currentSubseq, int occerTimes) 
         set<string> newDs;
         int endCount = 0;
 
-        for (string suffix : currentDs) {
+        for (const string &suffix : currentDs) {
             if (suffix.find(file) != string::npos) {
                 vector<string> suffixFiles;
                 boost::split(suffixFiles, suffix, boost::is_any_of("|"), boost::token_compress_on);
 
-                for (auto iter = suffixFiles.begin(); iter != suffixFiles.end(); iter ++) {
-                    if ((*iter).empty()) {
-                        suffixFiles.erase(iter);
-                        iter --;
-                        continue;
-                    }
-                    if (iter == suffixFiles.end() - 1) {    // the last one
+                for (int i = 0; i < suffixFiles.size() && i <= maxGap; i++) {
+                    if (i == suffixFiles.size() - 1) {
                         endCount ++;
-                    } else if (strcasecmp((*iter).c_str(), file.c_str()) == 0) {
-                        newDs.emplace(suffix.substr(suffix.find(*(iter+1))));
+                    } else if (strcasecmp(suffixFiles[i].c_str(), file.c_str()) == 0) {
+                        // todo : there may be some thing wrong
+                        newDs.insert(suffix.substr(suffix.find(suffixFiles[i+1])));
                         break;
                     }
                 }
-
-//                for (int i = 0; i < suffixFiles.size() && i <= maxGap; i++) {
-//                    if (i == suffixFiles.size() - 1) {
-//                        endCount ++;
-//                    } else if (strcasecmp(suffixFiles[i].c_str(), file.c_str()) == 0) {
-//                        // todo : there may be some thing wrong
-//                        newDs.insert(suffix.substr(suffix.find(suffixFiles[i+1])));
-//                        break;
-//                    }
-//                }
             }
         }
 
@@ -297,7 +284,7 @@ map<string, HDFSRule> CMinerHDFS::generateRules() {
                 for (int j = historyStart; j < historyEnd; ++j) {
                     historyList.emplace_back(accessFiles[j]);
                 }
-                string historyStr = boost::algorithm::join(historyList, "|");   // todo: join is to be tested weather the last one will JOIN
+                string historyStr = boost::algorithm::join(historyList, "|");
                 float historyConf = freSubsequences[historyStr] * 1.0f;
 
                 // 生成prediction子序列（只有一个文件）
