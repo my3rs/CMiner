@@ -14,6 +14,8 @@ using std::map;
 #include "Simulator.h"
 #include "../Miner/CMinerHDFS.h"
 
+
+
 class CMinerSimulator : public Simulator {
 private:
     CMinerHDFS miner;

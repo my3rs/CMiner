@@ -19,7 +19,7 @@ using std::vector;
 #include "Miner/FileAccessLog.h"
 
 
-static string LOG_PATH = "./audit.log";
+const string LOG_PATH("./audit.log");
 static CMinerHDFS miner;
 
 
@@ -92,19 +92,19 @@ void testByStep(string filePath) {
     // Mine: Frequent subsequences
     HDFSSubseqSuffix ss = miner.getSeqFromDs();
     miner.candidateFreSubsequences(ss.getSubsequence(), ss.getOccerTimes());
-    cout << "=== frequent subsequences:\n";
+    cout << "=== frequent subsequences:\n{";
     for (auto entry : miner.getFreSubsequences()) {
         cout << entry.first << "=" << entry.second << ", ";
     }
-    cout << "\n\n";
+    cout << "\b\b}\n\n";
 
     // Filter: Closed frequent subsequences
     miner.genClosedFreSubsequences();
-    cout << "=== closed frequent subsequences:\n";
+    cout << "=== closed frequent subsequences:\n{";
     for (auto entry : miner.getClosedFreSubsequences()) {
         cout << entry.first << "=" << entry.second << ", ";
     }
-    cout << "\n\n";
+    cout << "\b\b}\n\n";
 
     // Generate: rules
     miner.generateRules();

@@ -28,7 +28,7 @@ void CMinerMy::candidateFreSubsequences() {
             else {
                 for (auto &entry : freSubsequences) {
                     std::string prefix = entry.first;
-                    // 序列的每次扫描长度 = 当前最长序列 长度+ 1
+                    // 序列的每次扫描长度 = 当前最长序列长度 + 1
                     if (prefix.length() < currentSeqLen - 1) {
                         continue;
                     }
@@ -47,7 +47,7 @@ void CMinerMy::candidateFreSubsequences() {
                             break;
                         }
                     }
-                    if (pos < 0 || pos <= lastPos) {
+                    if (pos == string::npos || pos <= lastPos) {
                         continue;
                     }
 
